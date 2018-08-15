@@ -26,11 +26,13 @@
  *     http://www.opennms.com/
  *******************************************************************************/
 
-package org.opennms.netmgt.telemetry.api;
+package org.opennms.netmgt.telemetry.daemon;
 
 import java.lang.reflect.Constructor;
 import java.util.Set;
 
+import org.opennms.netmgt.telemetry.api.Listener;
+import org.opennms.netmgt.telemetry.api.parser.Parser;
 import org.opennms.netmgt.telemetry.config.api.ListenerDefinition;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.PropertyAccessorFactory;

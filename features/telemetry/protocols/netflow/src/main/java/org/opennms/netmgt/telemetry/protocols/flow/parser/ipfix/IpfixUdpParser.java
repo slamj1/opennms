@@ -1,8 +1,8 @@
 /*******************************************************************************
  * This file is part of OpenNMS(R).
  *
- * Copyright (C) 2017 The OpenNMS Group, Inc.
- * OpenNMS(R) is Copyright (C) 1999-2017 The OpenNMS Group, Inc.
+ * Copyright (C) 2018 The OpenNMS Group, Inc.
+ * OpenNMS(R) is Copyright (C) 1999-2018 The OpenNMS Group, Inc.
  *
  * OpenNMS(R) is a registered trademark of The OpenNMS Group, Inc.
  *
@@ -29,39 +29,30 @@
 package org.opennms.netmgt.telemetry.protocols.flow.parser.ipfix;
 
 import java.nio.ByteBuffer;
-import java.util.List;
-import java.util.Objects;
 
+import org.opennms.core.ipc.sink.api.AsyncDispatcher;
+import org.opennms.netmgt.telemetry.api.TelemetryMessage;
+import org.opennms.netmgt.telemetry.protocols.common.utils.BufferUtils;
+import org.opennms.netmgt.telemetry.protocols.flow.parser.Protocol;
+import org.opennms.netmgt.telemetry.protocols.flow.parser.UdpParserBase;
+import org.opennms.netmgt.telemetry.protocols.flow.parser.ie.RecordProvider;
 import org.opennms.netmgt.telemetry.protocols.flow.parser.ipfix.proto.Header;
 import org.opennms.netmgt.telemetry.protocols.flow.parser.ipfix.proto.Packet;
 import org.opennms.netmgt.telemetry.protocols.flow.parser.session.Session;
-import org.opennms.netmgt.telemetry.protocols.flow.parser.session.UdpSessionManager;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.DefaultAddressedEnvelope;
-import io.netty.channel.socket.DatagramPacket;
-import io.netty.handler.codec.MessageToMessageDecoder;
+public class IpfixUdpParser extends UdpParserBase {
 
-public class UdpPacketDecoder extends MessageToMessageDecoder<DatagramPacket> {
-    private final UdpSessionManager sessionManager;
-
-    public UdpPacketDecoder(final UdpSessionManager sessionManager) {
-        this.sessionManager = Objects.requireNonNull(sessionManager);
+    public IpfixUdpParser(final String name,
+                          final AsyncDispatcher<TelemetryMessage> dispatcher) {
+        super(Protocol.IPFIX, name, dispatcher);
     }
 
     @Override
-    protected void decode(final ChannelHandlerContext ctx, final DatagramPacket msg, final List<Object> out) throws Exception {
-        final Session session = this.sessionManager.getSession(msg.sender(), msg.recipient());
+    protected RecordProvider parse(final Session session,
+                                   final ByteBuffer buffer) throws Exception {
+        final Header header = new Header(BufferUtils.slice(buffer, Header.SIZE));
+        final Packet packet = new Packet(session, header, buffer);
 
-        final ByteBuf buf = msg.content();
-
-        final ByteBuffer headerBuffer = buf.readSlice(Header.SIZE).nioBuffer();
-        final Header header = new Header(headerBuffer);
-
-        final ByteBuffer payloadBuffer = buf.readSlice(header.length - Header.SIZE).nioBuffer();
-        final Packet packet = new Packet(session, msg.sender(), header, payloadBuffer);
-
-        out.add(new DefaultAddressedEnvelope<>(packet, msg.recipient(), msg.sender()));
+        return packet;
     }
 }

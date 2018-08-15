@@ -30,6 +30,8 @@ package org.opennms.netmgt.telemetry.api;
 
 import java.nio.ByteBuffer;
 
+import org.opennms.netmgt.telemetry.api.parser.UdpParser;
+
 public interface SmartUdpParser extends UdpParser {
     boolean handles(final ByteBuffer buffer);
 }

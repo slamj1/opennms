@@ -1,8 +1,8 @@
 /*******************************************************************************
  * This file is part of OpenNMS(R).
  *
- * Copyright (C) 2017-2017 The OpenNMS Group, Inc.
- * OpenNMS(R) is Copyright (C) 1999-2017 The OpenNMS Group, Inc.
+ * Copyright (C) 2018 The OpenNMS Group, Inc.
+ * OpenNMS(R) is Copyright (C) 1999-2018 The OpenNMS Group, Inc.
  *
  * OpenNMS(R) is a registered trademark of The OpenNMS Group, Inc.
  *
@@ -26,22 +26,21 @@
  *     http://www.opennms.com/
  *******************************************************************************/
 
-package org.opennms.netmgt.telemetry.protocols.flow.parser.netflow9;
+package org.opennms.netmgt.telemetry.listeners.simple;
 
-import org.opennms.netmgt.telemetry.protocols.flow.parser.AbstractUdpListener;
-import org.opennms.netmgt.telemetry.protocols.flow.parser.Protocol;
-import org.opennms.netmgt.telemetry.protocols.flow.parser.session.UdpSessionManager;
+import java.util.Set;
 
-import io.netty.channel.ChannelHandler;
+import org.opennms.netmgt.telemetry.api.Listener;
+import org.opennms.netmgt.telemetry.config.api.ListenerDefinition;
+import org.opennms.netmgt.telemetry.config.api.ParserDefinition;
 
-public class UdpListener extends AbstractUdpListener {
-
-    public UdpListener() {
-        super(Protocol.NETFLOW9);
-    }
-
+public class XUdpListener implements Listener.Factory {
     @Override
-    protected ChannelHandler buildDecoder(UdpSessionManager sessionManager) {
-        return new UdpPacketDecoder(sessionManager);
+    public Listener createListener(final ListenerDefinition listenerDefinition,
+                                   final Set<ParserDefinition> parserDefinitions) {
+
+
+
+        return null;
     }
 }

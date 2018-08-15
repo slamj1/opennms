@@ -1,8 +1,8 @@
 /*******************************************************************************
  * This file is part of OpenNMS(R).
  *
- * Copyright (C) 2017-2017 The OpenNMS Group, Inc.
- * OpenNMS(R) is Copyright (C) 1999-2017 The OpenNMS Group, Inc.
+ * Copyright (C) 2018 The OpenNMS Group, Inc.
+ * OpenNMS(R) is Copyright (C) 1999-2018 The OpenNMS Group, Inc.
  *
  * OpenNMS(R) is a registered trademark of The OpenNMS Group, Inc.
  *
@@ -26,35 +26,22 @@
  *     http://www.opennms.com/
  *******************************************************************************/
 
-package org.opennms.netmgt.telemetry.api;
+package org.opennms.netmgt.telemetry.api.parser;
 
-import java.util.Set;
+import java.net.InetSocketAddress;
+import java.nio.ByteBuffer;
 
-import org.opennms.netmgt.telemetry.api.parser.Parser;
-import org.opennms.netmgt.telemetry.config.api.ListenerDefinition;
-import org.opennms.netmgt.telemetry.config.api.ParserDefinition;
+import org.opennms.core.ipc.sink.api.AsyncDispatcher;
+import org.opennms.netmgt.telemetry.api.TelemetryMessage;
 
-/**
- * Interface used by the daemon to manage listeners.
- *
- * When messages are received, they should be forwarded to the given {@link Parser}s.
- *
- * @author jwhite
- */
-public interface Listener {
-
-    void setName(String name);
-
-    String getName();
-
-    void setParsers(Set<Parser> parsers);
-
-    void start() throws InterruptedException;
-
-    void stop() throws InterruptedException;
+public interface UdpParser extends Parser {
+    // TODO: Use a more specific exception?
+    void parse(final ByteBuffer buffer,
+               final InetSocketAddress remoteAddress,
+               final InetSocketAddress localAddress) throws Exception;
 
     interface Factory {
-        Listener createListener(final ListenerDefinition listenerDefinition,
-                                final Set<ParserDefinition> parserDefinitions);
+        UdpParser createUdpParser(final String name,
+                                  final AsyncDispatcher<TelemetryMessage> dispatcher);
     }
 }

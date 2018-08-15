@@ -1,8 +1,8 @@
 /*******************************************************************************
  * This file is part of OpenNMS(R).
  *
- * Copyright (C) 2017-2017 The OpenNMS Group, Inc.
- * OpenNMS(R) is Copyright (C) 1999-2017 The OpenNMS Group, Inc.
+ * Copyright (C) 2018 The OpenNMS Group, Inc.
+ * OpenNMS(R) is Copyright (C) 1999-2018 The OpenNMS Group, Inc.
  *
  * OpenNMS(R) is a registered trademark of The OpenNMS Group, Inc.
  *
@@ -26,24 +26,24 @@
  *     http://www.opennms.com/
  *******************************************************************************/
 
-package org.opennms.netmgt.telemetry.api;
+package org.opennms.netmgt.telemetry.api.parser;
+
+import java.net.InetSocketAddress;
+import java.nio.ByteBuffer;
 
 import org.opennms.core.ipc.sink.api.AsyncDispatcher;
+import org.opennms.netmgt.telemetry.api.TelemetryMessage;
 
-import io.netty.channel.EventLoopGroup;
+public interface TcpParser extends Parser {
+    interface Handler {
+        // TODO: Use a more specific exception?
+        void parse(final ByteBuffer buffer) throws Exception;
+    }
 
-/**
- * Interface used by the daemon to manage parsers.
- *
- * When messages are received, they should be forwarded to the given {@link AsyncDispatcher}.
- *
- * @author jwhite
- */
-public interface Parser {
-    void setName(final String name);
+    Handler accept(final InetSocketAddress remoteAddress, final InetSocketAddress localAddress);
 
-    void setDispatcher(final AsyncDispatcher<TelemetryMessage> dispatcher);
-
-    void start(final EventLoopGroup eventLoopGroup);
-    void stop();
+    interface Factory {
+        TcpParser createTcpParser(final String name,
+                                  final AsyncDispatcher<TelemetryMessage> dispatcher);
+    }
 }

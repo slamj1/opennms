@@ -1,8 +1,8 @@
 /*******************************************************************************
  * This file is part of OpenNMS(R).
  *
- * Copyright (C) 2017-2017 The OpenNMS Group, Inc.
- * OpenNMS(R) is Copyright (C) 1999-2017 The OpenNMS Group, Inc.
+ * Copyright (C) 2018 The OpenNMS Group, Inc.
+ * OpenNMS(R) is Copyright (C) 1999-2018 The OpenNMS Group, Inc.
  *
  * OpenNMS(R) is a registered trademark of The OpenNMS Group, Inc.
  *
@@ -26,22 +26,18 @@
  *     http://www.opennms.com/
  *******************************************************************************/
 
-package org.opennms.netmgt.telemetry.protocols.flow.parser.ipfix;
+package org.opennms.netmgt.telemetry.protocols.flow.parser;
 
-import org.opennms.netmgt.telemetry.protocols.flow.parser.AbstractUdpListener;
-import org.opennms.netmgt.telemetry.protocols.flow.parser.Protocol;
-import org.opennms.netmgt.telemetry.protocols.flow.parser.session.UdpSessionManager;
+import org.opennms.core.ipc.sink.api.AsyncDispatcher;
+import org.opennms.netmgt.telemetry.api.TelemetryMessage;
+import org.opennms.netmgt.telemetry.api.parser.UdpParser;
+import org.opennms.netmgt.telemetry.protocols.flow.parser.netflow9.Netflow9UdpParser;
 
-import io.netty.channel.ChannelHandler;
-
-public class UdpListener extends AbstractUdpListener {
-
-    public UdpListener() {
-        super(Protocol.IPFIX);
-    }
-
+public class Netflow9 implements UdpParser.Factory {
     @Override
-    protected ChannelHandler buildDecoder(UdpSessionManager sessionManager) {
-        return new UdpPacketDecoder(sessionManager);
+    public UdpParser createUdpParser(final String name,
+                                     final AsyncDispatcher<TelemetryMessage> dispatcher) {
+        return new Netflow9UdpParser(name, dispatcher);
     }
+
 }

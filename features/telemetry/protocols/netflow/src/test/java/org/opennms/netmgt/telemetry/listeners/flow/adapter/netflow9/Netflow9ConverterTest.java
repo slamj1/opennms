@@ -49,7 +49,7 @@ import org.junit.Test;
 import org.opennms.netmgt.flows.api.Flow;
 import org.opennms.netmgt.telemetry.protocols.flow.adapter.netflow9.Netflow9Converter;
 import org.opennms.netmgt.telemetry.protocols.flow.parser.InvalidPacketException;
-import org.opennms.netmgt.telemetry.protocols.flow.parser.PacketHandler;
+import org.opennms.netmgt.telemetry.protocols.flow.parser.ParserBase;
 import org.opennms.netmgt.telemetry.protocols.flow.parser.netflow9.proto.Header;
 import org.opennms.netmgt.telemetry.protocols.flow.parser.netflow9.proto.Packet;
 import org.opennms.netmgt.telemetry.protocols.flow.parser.Protocol;
@@ -106,7 +106,7 @@ public class Netflow9ConverterTest {
                 header = new Header(slice(buffer, Header.SIZE));
                 final Packet packet = new Packet(session, header, buffer);
                 packet.getRecords().forEach(rec -> {
-                    final ByteBuffer bf = PacketHandler.serialize(Protocol.NETFLOW9, rec);
+                    final ByteBuffer bf = ParserBase.serialize(Protocol.NETFLOW9, rec);
                     final BsonDocument doc = new RawBsonDocument(bf.array());
                     flows.addAll(nf9Converter.convert(doc));
                 });

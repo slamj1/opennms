@@ -32,8 +32,8 @@ import java.net.InetSocketAddress;
 import java.util.Set;
 
 import org.opennms.netmgt.telemetry.api.Listener;
-import org.opennms.netmgt.telemetry.api.Parser;
-import org.opennms.netmgt.telemetry.api.TcpParser;
+import org.opennms.netmgt.telemetry.api.parser.Parser;
+import org.opennms.netmgt.telemetry.api.parser.TcpParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -85,7 +85,7 @@ public class TcpListener implements Listener {
                 .childHandler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(final SocketChannel ch) {
-                        final TcpParser.Session session = TcpListener.this.parser.accept(ch.localAddress(), ch.remoteAddress());
+                        final TcpParser.Handler session = TcpListener.this.parser.accept(ch.remoteAddress(), ch.localAddress());
 
                         ch.pipeline()
                                 .addLast(new SimpleChannelInboundHandler<ByteBuf>() {
@@ -116,12 +116,12 @@ public class TcpListener implements Listener {
 
     public void stop() throws InterruptedException {
         LOG.info("Closing channel...");
-        socketFuture.channel().close().sync();
+        this.socketFuture.channel().close().sync();
 
         this.parser.stop();
 
         LOG.info("Closing boss group...");
-        bossGroup.shutdownGracefully().sync();
+        this.bossGroup.shutdownGracefully().sync();
     }
 
     @Override

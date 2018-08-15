@@ -59,42 +59,53 @@ import org.slf4j.LoggerFactory;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.DefaultAddressedEnvelope;
-import io.netty.channel.SimpleChannelInboundHandler;
 
-public class PacketHandler extends SimpleChannelInboundHandler<DefaultAddressedEnvelope<RecordProvider, InetSocketAddress>> {
-    private static final Logger LOG = LoggerFactory.getLogger(PacketHandler.class);
+public class ParserBase {
+    private static final Logger LOG = LoggerFactory.getLogger(ParserBase.class);
 
     private final Protocol protocol;
 
+    private final String name;
+
     private final AsyncDispatcher<TelemetryMessage> dispatcher;
 
-    public PacketHandler(final Protocol protocol,
-                         final AsyncDispatcher<TelemetryMessage> dispatcher) {
+    public ParserBase(final Protocol protocol,
+                      final String name,
+                      final AsyncDispatcher<TelemetryMessage> dispatcher) {
         this.protocol = Objects.requireNonNull(protocol);
+        this.name = Objects.requireNonNull(name);
         this.dispatcher = Objects.requireNonNull(dispatcher);
     }
 
-    @Override
-    protected void channelRead0(final ChannelHandlerContext ctx, final DefaultAddressedEnvelope<RecordProvider, InetSocketAddress> packet) throws Exception {
+//    public void setName(final String name) {
+//        this.name = name;
+//    }
+//
+//    public void setDispatcher(final AsyncDispatcher<TelemetryMessage> dispatcher) {
+//        this.dispatcher = dispatcher;
+//    }
+
+    protected void transmit(final RecordProvider packet, final InetSocketAddress remoteAddress) throws Exception {
         LOG.trace("Got packet: {}", packet);
 
-        packet.content().getRecords().forEach(record -> {
+        packet.getRecords().forEach(record -> {
             final ByteBuffer buffer = serialize(this.protocol, record);
 
             // Build the message to dispatch
-            final TelemetryMessage msg = new TelemetryMessage(packet.sender(), buffer);
+            final TelemetryMessage msg = new TelemetryMessage(remoteAddress, buffer);
 
             // Dispatch and retain a reference to the packet
             // in the case that we are sharing the underlying byte array
             final CompletableFuture<TelemetryMessage> future = dispatcher.send(msg);
 
             // Pass exception if dispatching fails
-            future.handle((result, ex) -> {
-                if (ex != null) {
-                    ctx.fireExceptionCaught(ex);
-                }
-                return result;
-            });
+            // FIXME: fooker - use futures everywhere
+//            future.handle((result, ex) -> {
+//                if (ex != null) {
+//                    ctx.fireExceptionCaught(ex);
+//                }
+//                return result;
+//            });
         });
     }
 

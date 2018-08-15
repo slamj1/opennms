@@ -32,8 +32,8 @@ import java.net.InetSocketAddress;
 import java.util.Set;
 
 import org.opennms.netmgt.telemetry.api.Listener;
-import org.opennms.netmgt.telemetry.api.Parser;
-import org.opennms.netmgt.telemetry.api.UdpParser;
+import org.opennms.netmgt.telemetry.api.parser.Parser;
+import org.opennms.netmgt.telemetry.api.parser.UdpParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,6 +63,7 @@ public class UdpListener implements Listener {
 
     private String host = null;
     private int port = 50000;
+
     private int maxPacketSize = 8096;
 
     public void start() throws InterruptedException {
@@ -96,13 +97,9 @@ public class UdpListener implements Listener {
                                     public void exceptionCaught(final ChannelHandlerContext ctx, final Throwable cause) throws Exception {
                                         LOG.warn("Invalid packet: {}", cause.getMessage());
                                         LOG.debug("", cause);
-//                                        AbstractUdpListener.this.sessionManager.drop(ch.remoteAddress(), ch.localAddress());
+                                        // FIXME was: AbstractUdpListener.this.sessionManager.drop(ch.remoteAddress(), ch.localAddress());
                                     }
                                 });
-
-                        // TODO: fooker: Implement.
-//                                .addLast(AbstractUdpListener.this.buildDecoder(AbstractUdpListener.this.sessionManager))
-//                                .addLast(new PacketHandler(AbstractUdpListener.this.protocol, AbstractUdpListener.this.dispatcher))
                     }
                 })
                 .bind(address)
@@ -166,20 +163,4 @@ public class UdpListener implements Listener {
     public void setName(String name) {
         this.name = name;
     }
-
-//    protected static ByteBuffer wrapContentsWithNioByteBuffer(DatagramPacket packet) {
-//        final ByteBuf content = packet.content();
-//        final int length = content.readableBytes();
-//        final byte[] array;
-//        final int offset;
-//        if (content.hasArray()) {
-//            array = content.array();
-//            offset = content.arrayOffset() + content.readerIndex();
-//        } else {
-//            array = new byte[length];
-//            content.getBytes(content.readerIndex(), array, 0, length);
-//            offset = 0;
-//        }
-//        return ByteBuffer.wrap(array, offset, length);
-//    }
 }

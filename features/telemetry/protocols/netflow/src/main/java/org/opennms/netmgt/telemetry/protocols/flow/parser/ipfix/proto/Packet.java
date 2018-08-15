@@ -67,8 +67,6 @@ public final class Packet implements Iterable<FlowSet<?>>, RecordProvider {
      +----------------------------------------------------+
     */
 
-    public final InetSocketAddress sender;
-
     public final Header header;
 
     public final List<TemplateSet> templateSets;
@@ -76,11 +74,8 @@ public final class Packet implements Iterable<FlowSet<?>>, RecordProvider {
     public final List<DataSet> dataSets;
 
     public Packet(final Session session,
-                  final InetSocketAddress sender,
                   final Header header,
                   final ByteBuffer buffer) throws InvalidPacketException {
-        this.sender = Objects.requireNonNull(sender);
-
         this.header = Objects.requireNonNull(header);
 
         final List<TemplateSet> templateSets = new LinkedList();

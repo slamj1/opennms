@@ -26,16 +26,31 @@
  *     http://www.opennms.com/
  *******************************************************************************/
 
-package org.opennms.netmgt.telemetry.api;
+package org.opennms.netmgt.telemetry.protocols.flow.parser.netflow9;
 
-import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
-import java.util.IllegalFormatException;
 
-public interface TcpParser extends Parser {
-    interface Session {
-        void parse(final ByteBuffer buffer) throws IllegalFormatException;
+import org.opennms.core.ipc.sink.api.AsyncDispatcher;
+import org.opennms.netmgt.telemetry.api.TelemetryMessage;
+import org.opennms.netmgt.telemetry.protocols.common.utils.BufferUtils;
+import org.opennms.netmgt.telemetry.protocols.flow.parser.Protocol;
+import org.opennms.netmgt.telemetry.protocols.flow.parser.UdpParserBase;
+import org.opennms.netmgt.telemetry.protocols.flow.parser.ie.RecordProvider;
+import org.opennms.netmgt.telemetry.protocols.flow.parser.netflow9.proto.Header;
+import org.opennms.netmgt.telemetry.protocols.flow.parser.netflow9.proto.Packet;
+import org.opennms.netmgt.telemetry.protocols.flow.parser.session.Session;
+
+public class Netflow9UdpParser extends UdpParserBase {
+    public Netflow9UdpParser(final String name,
+                             final AsyncDispatcher<TelemetryMessage> dispatcher) {
+        super(Protocol.NETFLOW9, name, dispatcher);
     }
 
-    Session accept(final InetSocketAddress localAddress, final InetSocketAddress remoteAddress);
+    @Override
+    protected RecordProvider parse(Session session, ByteBuffer buffer) throws Exception {
+        final Header header = new Header(BufferUtils.slice(buffer, Header.SIZE));
+        final Packet packet = new Packet(session, header, buffer);
+
+        return packet;
+    }
 }

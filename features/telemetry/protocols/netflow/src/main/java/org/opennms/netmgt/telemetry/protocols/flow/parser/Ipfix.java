@@ -1,8 +1,8 @@
 /*******************************************************************************
  * This file is part of OpenNMS(R).
  *
- * Copyright (C) 2017-2017 The OpenNMS Group, Inc.
- * OpenNMS(R) is Copyright (C) 1999-2017 The OpenNMS Group, Inc.
+ * Copyright (C) 2018 The OpenNMS Group, Inc.
+ * OpenNMS(R) is Copyright (C) 1999-2018 The OpenNMS Group, Inc.
  *
  * OpenNMS(R) is a registered trademark of The OpenNMS Group, Inc.
  *
@@ -26,35 +26,26 @@
  *     http://www.opennms.com/
  *******************************************************************************/
 
-package org.opennms.netmgt.telemetry.api;
+package org.opennms.netmgt.telemetry.protocols.flow.parser;
 
-import java.util.Set;
+import org.opennms.core.ipc.sink.api.AsyncDispatcher;
+import org.opennms.netmgt.telemetry.api.TelemetryMessage;
+import org.opennms.netmgt.telemetry.api.parser.TcpParser;
+import org.opennms.netmgt.telemetry.api.parser.UdpParser;
+import org.opennms.netmgt.telemetry.protocols.flow.parser.ipfix.IpfixTcpParser;
+import org.opennms.netmgt.telemetry.protocols.flow.parser.ipfix.IpfixUdpParser;
 
-import org.opennms.netmgt.telemetry.api.parser.Parser;
-import org.opennms.netmgt.telemetry.config.api.ListenerDefinition;
-import org.opennms.netmgt.telemetry.config.api.ParserDefinition;
+public class Ipfix implements UdpParser.Factory, TcpParser.Factory {
 
-/**
- * Interface used by the daemon to manage listeners.
- *
- * When messages are received, they should be forwarded to the given {@link Parser}s.
- *
- * @author jwhite
- */
-public interface Listener {
+    @Override
+    public TcpParser createTcpParser(final String name,
+                                     final AsyncDispatcher<TelemetryMessage> dispatcher) {
+        return new IpfixTcpParser(name, dispatcher);
+    }
 
-    void setName(String name);
-
-    String getName();
-
-    void setParsers(Set<Parser> parsers);
-
-    void start() throws InterruptedException;
-
-    void stop() throws InterruptedException;
-
-    interface Factory {
-        Listener createListener(final ListenerDefinition listenerDefinition,
-                                final Set<ParserDefinition> parserDefinitions);
+    @Override
+    public UdpParser createUdpParser(final String name,
+                                     final AsyncDispatcher<TelemetryMessage> dispatcher) {
+        return new IpfixUdpParser(name, dispatcher);
     }
 }
