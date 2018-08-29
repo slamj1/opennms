@@ -28,11 +28,15 @@
 
 package org.opennms.netmgt.telemetry.protocols.flow.parser.netflow9;
 
+import static org.opennms.netmgt.telemetry.common.utils.BufferUtils.slice;
+import static org.opennms.netmgt.telemetry.common.utils.BufferUtils.uint16;
+
 import java.nio.ByteBuffer;
 
 import org.opennms.core.ipc.sink.api.AsyncDispatcher;
 import org.opennms.netmgt.telemetry.api.TelemetryMessage;
-import org.opennms.netmgt.telemetry.protocols.common.utils.BufferUtils;
+import org.opennms.netmgt.telemetry.listeners.simple.SimpleUdpParser;
+import org.opennms.netmgt.telemetry.listeners.smart.SmartUdpParser;
 import org.opennms.netmgt.telemetry.protocols.flow.parser.Protocol;
 import org.opennms.netmgt.telemetry.protocols.flow.parser.UdpParserBase;
 import org.opennms.netmgt.telemetry.protocols.flow.parser.ie.RecordProvider;
@@ -40,7 +44,7 @@ import org.opennms.netmgt.telemetry.protocols.flow.parser.netflow9.proto.Header;
 import org.opennms.netmgt.telemetry.protocols.flow.parser.netflow9.proto.Packet;
 import org.opennms.netmgt.telemetry.protocols.flow.parser.session.Session;
 
-public class Netflow9UdpParser extends UdpParserBase {
+public class Netflow9UdpParser extends UdpParserBase implements SimpleUdpParser, SmartUdpParser {
     public Netflow9UdpParser(final String name,
                              final AsyncDispatcher<TelemetryMessage> dispatcher) {
         super(Protocol.NETFLOW9, name, dispatcher);
@@ -48,9 +52,14 @@ public class Netflow9UdpParser extends UdpParserBase {
 
     @Override
     protected RecordProvider parse(Session session, ByteBuffer buffer) throws Exception {
-        final Header header = new Header(BufferUtils.slice(buffer, Header.SIZE));
+        final Header header = new Header(slice(buffer, Header.SIZE));
         final Packet packet = new Packet(session, header, buffer);
 
         return packet;
+    }
+
+    @Override
+    public boolean handles(final ByteBuffer buffer) {
+        return uint16(buffer) == Header.VERSION;
     }
 }

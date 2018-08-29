@@ -57,9 +57,6 @@ import org.opennms.netmgt.telemetry.protocols.flow.parser.ie.values.UnsignedValu
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.DefaultAddressedEnvelope;
-
 public class ParserBase {
     private static final Logger LOG = LoggerFactory.getLogger(ParserBase.class);
 
@@ -77,13 +74,9 @@ public class ParserBase {
         this.dispatcher = Objects.requireNonNull(dispatcher);
     }
 
-//    public void setName(final String name) {
-//        this.name = name;
-//    }
-//
-//    public void setDispatcher(final AsyncDispatcher<TelemetryMessage> dispatcher) {
-//        this.dispatcher = dispatcher;
-//    }
+    public String getName() {
+        return this.name;
+    }
 
     protected void transmit(final RecordProvider packet, final InetSocketAddress remoteAddress) throws Exception {
         LOG.trace("Got packet: {}", packet);

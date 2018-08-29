@@ -28,6 +28,7 @@
 
 package org.opennms.netmgt.telemetry.config.api;
 
+import java.util.List;
 import java.util.Map;
 
 public interface ListenerDefinition {
@@ -37,5 +38,7 @@ public interface ListenerDefinition {
     String getClassName();
 
     Map<String, String> getParameterMap();
+
+    List<? extends ParserDefinition> getParsers();
 
 }

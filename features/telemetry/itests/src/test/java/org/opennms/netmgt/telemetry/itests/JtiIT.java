@@ -64,7 +64,7 @@ import org.opennms.netmgt.telemetry.config.model.ParserConfig;
 import org.opennms.netmgt.telemetry.config.model.QueueConfig;
 import org.opennms.netmgt.telemetry.config.model.TelemetrydConfig;
 import org.opennms.netmgt.telemetry.daemon.Telemetryd;
-import org.opennms.netmgt.telemetry.listeners.simple.UdpListener;
+import org.opennms.netmgt.telemetry.listeners.simple.SimpleUdpListener;
 import org.opennms.test.JUnitConfigurationEnvironment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
@@ -166,13 +166,13 @@ public class JtiIT {
 
         ListenerConfig jtiListener = new ListenerConfig();
         jtiListener.setName("JTI");
-        jtiListener.setClassName(UdpListener.class.getCanonicalName());
+        jtiListener.setClassName(SimpleUdpListener.class.getCanonicalName());
         jtiListener.getParameters().add(new Parameter("port", Integer.toString(port)));
         telemetrydConfig.getListeners().add(jtiListener);
 
         ParserConfig jtiParser = new ParserConfig();
         jtiParser.setName("JTI-UDP-" + port);
-        jtiParser.setClassName(UdpListener.class.getCanonicalName());
+        jtiParser.setClassName(SimpleUdpListener.class.getCanonicalName());
         jtiParser.setQueue(jtiQueue);
         jtiListener.getParsers().add(jtiParser);
 

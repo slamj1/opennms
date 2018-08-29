@@ -31,6 +31,7 @@ package org.opennms.netmgt.telemetry.daemon;
 import org.opennms.core.ipc.sink.api.AsyncDispatcher;
 import org.opennms.core.ipc.sink.api.MessageConsumerManager;
 import org.opennms.core.ipc.sink.api.MessageDispatcherFactory;
+import org.opennms.netmgt.telemetry.common.Beans;
 import org.opennms.netmgt.telemetry.config.dao.TelemetrydConfigDao;
 import org.opennms.netmgt.telemetry.config.model.AdapterConfig;
 import org.opennms.netmgt.telemetry.config.model.ListenerConfig;
@@ -44,7 +45,7 @@ import org.opennms.netmgt.events.api.annotations.EventHandler;
 import org.opennms.netmgt.events.api.annotations.EventListener;
 import org.opennms.netmgt.telemetry.api.Adapter;
 import org.opennms.netmgt.telemetry.api.Listener;
-import org.opennms.netmgt.telemetry.api.parser.Parser;
+import org.opennms.netmgt.telemetry.api.Parser;
 import org.opennms.netmgt.telemetry.api.TelemetryMessage;
 import org.opennms.netmgt.xml.event.Event;
 import org.slf4j.Logger;
@@ -129,15 +130,18 @@ public class Telemetryd implements SpringServiceDaemon {
         }
 
         for (final ListenerConfig listenerConfig : config.getListeners()) {
-            // Create all parsers for the listener
+            final Listener.Factory listenerFactory = Beans.createFactory(Listener.Factory.class, listenerConfig.getClassName());
+
+            // Create all parsers for this listener
             final Set<Parser> parsers = listenerConfig.getParsers().stream()
-                    .map(parserConfig -> {
-                        final AsyncDispatcher<TelemetryMessage> dispatcher = this.dispatchers.get(parserConfig.getQueue());
-                        return ParserFactory.buildParser(parserConfig, dispatcher);
-                    })
+                    .map(parserConfig ->
+                            listenerFactory.parser(parserConfig)
+                                .create(this.dispatchers.get(parserConfig.getQueue())))
                     .collect(Collectors.toSet());
 
-            listeners.add(ListenerFactory.buildListener(listenerConfig, parsers));
+            final Listener listener = listenerFactory.create(listenerConfig.getName(), listenerConfig.getParameterMap(), parsers);
+
+            listeners.add(listener);
         }
 
         // Start the consumers

@@ -38,6 +38,16 @@
       <version>${project.version}</version>
     </dependency>
     <dependency>
+      <groupId>org.opennms.features.telemetry.listeners</groupId>
+      <artifactId>org.opennms.features.telemetry.listeners.simple</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.opennms.features.telemetry.listeners</groupId>
+      <artifactId>org.opennms.features.telemetry.listeners.smart</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
       <groupId>org.opennms.features.telemetry.protocols</groupId>
       <artifactId>org.opennms.features.telemetry.protocols.common</artifactId>
       <version>${project.version}</version>

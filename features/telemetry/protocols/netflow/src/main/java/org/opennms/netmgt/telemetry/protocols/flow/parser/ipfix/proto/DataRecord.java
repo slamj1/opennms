@@ -28,9 +28,9 @@
 
 package org.opennms.netmgt.telemetry.protocols.flow.parser.ipfix.proto;
 
-import static org.opennms.netmgt.telemetry.protocols.common.utils.BufferUtils.slice;
-import static org.opennms.netmgt.telemetry.protocols.common.utils.BufferUtils.uint16;
-import static org.opennms.netmgt.telemetry.protocols.common.utils.BufferUtils.uint8;
+import static org.opennms.netmgt.telemetry.common.utils.BufferUtils.slice;
+import static org.opennms.netmgt.telemetry.common.utils.BufferUtils.uint16;
+import static org.opennms.netmgt.telemetry.common.utils.BufferUtils.uint8;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;

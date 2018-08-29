@@ -31,7 +31,7 @@ package org.opennms.netmgt.telemetry.protocols.sflow.parser.proto;
 import java.nio.ByteBuffer;
 import java.util.Optional;
 
-import org.opennms.netmgt.telemetry.protocols.common.utils.BufferUtils;
+import org.opennms.netmgt.telemetry.common.utils.BufferUtils;
 import org.opennms.netmgt.telemetry.protocols.sflow.parser.InvalidPacketException;
 
 import com.google.common.base.MoreObjects;

@@ -28,24 +28,42 @@
 
 package org.opennms.netmgt.telemetry.protocols.flow.parser;
 
+import java.util.Map;
+
 import org.opennms.core.ipc.sink.api.AsyncDispatcher;
 import org.opennms.netmgt.telemetry.api.TelemetryMessage;
-import org.opennms.netmgt.telemetry.api.parser.TcpParser;
-import org.opennms.netmgt.telemetry.api.parser.UdpParser;
+import org.opennms.netmgt.telemetry.listeners.simple.SimpleTcpParser;
+import org.opennms.netmgt.telemetry.listeners.simple.SimpleUdpParser;
+import org.opennms.netmgt.telemetry.listeners.smart.SmartUdpListener;
+import org.opennms.netmgt.telemetry.listeners.smart.SmartUdpParser;
 import org.opennms.netmgt.telemetry.protocols.flow.parser.ipfix.IpfixTcpParser;
 import org.opennms.netmgt.telemetry.protocols.flow.parser.ipfix.IpfixUdpParser;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.PropertyAccessorFactory;
 
-public class Ipfix implements UdpParser.Factory, TcpParser.Factory {
+public class Ipfix implements SmartUdpParser.Factory, SimpleTcpParser.Factory {
 
     @Override
-    public TcpParser createTcpParser(final String name,
-                                     final AsyncDispatcher<TelemetryMessage> dispatcher) {
-        return new IpfixTcpParser(name, dispatcher);
+    public SimpleTcpParser createTcpParser(final String name,
+                                           final Map<String, String> parameters,
+                                           final AsyncDispatcher<TelemetryMessage> dispatcher) {
+        final IpfixTcpParser parser = new IpfixTcpParser(name, dispatcher);
+
+        final BeanWrapper wrapper = PropertyAccessorFactory.forBeanPropertyAccess(parser);
+        wrapper.setPropertyValues(parameters);
+
+        return parser;
     }
 
     @Override
-    public UdpParser createUdpParser(final String name,
-                                     final AsyncDispatcher<TelemetryMessage> dispatcher) {
-        return new IpfixUdpParser(name, dispatcher);
+    public SmartUdpParser createUdpParser(final String name,
+                                          final Map<String, String> parameters,
+                                          final AsyncDispatcher<TelemetryMessage> dispatcher) {
+        final IpfixUdpParser parser = new IpfixUdpParser(name, dispatcher);
+
+        final BeanWrapper wrapper = PropertyAccessorFactory.forBeanPropertyAccess(parser);
+        wrapper.setPropertyValues(parameters);
+
+        return parser;
     }
 }

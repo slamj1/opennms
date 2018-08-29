@@ -94,6 +94,7 @@ public class ListenerConfig implements ListenerDefinition {
         this.parameters = parameters;
     }
 
+    @Override
     public List<ParserConfig> getParsers() {
         return this.parsers;
     }

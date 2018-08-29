@@ -35,18 +35,14 @@ import java.util.concurrent.TimeUnit;
 
 import org.opennms.core.ipc.sink.api.AsyncDispatcher;
 import org.opennms.netmgt.telemetry.api.TelemetryMessage;
-import org.opennms.netmgt.telemetry.api.parser.UdpParser;
-import org.opennms.netmgt.telemetry.protocols.common.utils.BufferUtils;
 import org.opennms.netmgt.telemetry.protocols.flow.parser.ie.RecordProvider;
-import org.opennms.netmgt.telemetry.protocols.flow.parser.netflow9.proto.Header;
-import org.opennms.netmgt.telemetry.protocols.flow.parser.netflow9.proto.Packet;
 import org.opennms.netmgt.telemetry.protocols.flow.parser.session.Session;
 import org.opennms.netmgt.telemetry.protocols.flow.parser.session.UdpSessionManager;
 
 import io.netty.channel.EventLoopGroup;
 import io.netty.util.concurrent.ScheduledFuture;
 
-public abstract class UdpParserBase extends ParserBase implements UdpParser {
+public abstract class UdpParserBase extends ParserBase {
     public final static long HOUSEKEEPING_INTERVAL = 60000;
 
     private UdpSessionManager sessionManager;
@@ -60,13 +56,11 @@ public abstract class UdpParserBase extends ParserBase implements UdpParser {
 
     protected abstract RecordProvider parse(final Session session, final ByteBuffer buffer) throws Exception;
 
-    @Override
     public final void parse(final ByteBuffer buffer, final InetSocketAddress remoteAddress, final InetSocketAddress localAddress) throws Exception {
         final Session session = this.sessionManager.getSession(remoteAddress, localAddress);
         this.transmit(this.parse(session, buffer), remoteAddress);
     }
 
-    @Override
     public void start(final EventLoopGroup eventLoopGroup) {
         this.sessionManager = new UdpSessionManager(this.templateTimeout);
         this.housekeepingFuture = eventLoopGroup.scheduleAtFixedRate(this.sessionManager::doHousekeeping,
@@ -75,7 +69,6 @@ public abstract class UdpParserBase extends ParserBase implements UdpParser {
                 TimeUnit.MILLISECONDS);
     }
 
-    @Override
     public void stop() {
         this.housekeepingFuture.cancel(false);
     }

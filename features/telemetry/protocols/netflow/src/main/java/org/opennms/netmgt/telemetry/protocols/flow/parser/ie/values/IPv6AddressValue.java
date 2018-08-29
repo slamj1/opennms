@@ -28,7 +28,7 @@
 
 package org.opennms.netmgt.telemetry.protocols.flow.parser.ie.values;
 
-import static org.opennms.netmgt.telemetry.protocols.common.utils.BufferUtils.bytes;
+import static org.opennms.netmgt.telemetry.common.utils.BufferUtils.bytes;
 
 import java.net.Inet4Address;
 import java.net.Inet6Address;

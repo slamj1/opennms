@@ -333,10 +333,12 @@
             <feature>tsrm-troubleticketer</feature>
             <feature>datachoices</feature>
             <feature>eif-adapter</feature>
-            <feature>opennms-telemetry-collection</feature>
+            <feature>opennms-telemetry-common</feature>
             <feature>opennms-telemetry-daemon</feature>
             <feature>opennms-telemetry-jti</feature>
             <feature>opennms-telemetry-nxos</feature>
+            <feature>opennms-telemetry-netflow</feature>
+            <feature>opennms-telemetry-sflow</feature>
 
             <!-- BSM -->
             <feature>org.opennms.features.bsm.service.api</feature>
@@ -817,8 +819,8 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.opennms.features.telemetry.adapters</groupId>
-      <artifactId>org.opennms.features.telemetry.adapters.api</artifactId>
+      <groupId>org.opennms.features.telemetry</groupId>
+      <artifactId>org.opennms.features.telemetry.api</artifactId>
       <version>${project.version}</version>
       <scope>provided</scope>
     </dependency>

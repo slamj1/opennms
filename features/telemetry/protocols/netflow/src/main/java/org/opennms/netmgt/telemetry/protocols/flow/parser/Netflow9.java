@@ -28,16 +28,27 @@
 
 package org.opennms.netmgt.telemetry.protocols.flow.parser;
 
+import java.util.Map;
+
 import org.opennms.core.ipc.sink.api.AsyncDispatcher;
 import org.opennms.netmgt.telemetry.api.TelemetryMessage;
-import org.opennms.netmgt.telemetry.api.parser.UdpParser;
+import org.opennms.netmgt.telemetry.listeners.simple.SimpleUdpParser;
+import org.opennms.netmgt.telemetry.listeners.smart.SmartUdpParser;
 import org.opennms.netmgt.telemetry.protocols.flow.parser.netflow9.Netflow9UdpParser;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.PropertyAccessorFactory;
 
-public class Netflow9 implements UdpParser.Factory {
+public class Netflow9 implements SmartUdpParser.Factory {
     @Override
-    public UdpParser createUdpParser(final String name,
-                                     final AsyncDispatcher<TelemetryMessage> dispatcher) {
-        return new Netflow9UdpParser(name, dispatcher);
+    public SmartUdpParser createUdpParser(final String name,
+                                          final Map<String, String> parameters,
+                                          final AsyncDispatcher<TelemetryMessage> dispatcher) {
+        final Netflow9UdpParser parser = new Netflow9UdpParser(name, dispatcher);
+
+        final BeanWrapper wrapper = PropertyAccessorFactory.forBeanPropertyAccess(parser);
+        wrapper.setPropertyValues(parameters);
+
+        return parser;
     }
 
 }

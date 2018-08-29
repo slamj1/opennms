@@ -1126,22 +1126,33 @@
       <bundle>mvn:org.opennms.features.kafka/org.opennms.features.kafka.producer/${project.version}</bundle>
     </feature>
 
-    <feature name="opennms-telemetry-collection" description="OpenNMS :: Telemetry :: Collection" version="${project.version}">
+    <feature name="opennms-telemetry-common" description="OpenNMS :: Telemetry :: Common" version="${project.version}">
       <feature>guava</feature>
 
       <feature>opennms-collection-api</feature>
       <feature>opennms-osgi-jsr223</feature>
       <bundle>mvn:org.opennms.core/org.opennms.core.lib/${project.version}</bundle>
-      <bundle>mvn:org.opennms.features.telemetry.config/org.opennms.features.telemetry.config.api/${project.version}</bundle>
       <bundle>mvn:org.opennms.features.telemetry/org.opennms.features.telemetry.api/${project.version}</bundle>
-      <bundle>mvn:org.opennms.features.telemetry.protocols/org.opennms.features.telemetry.protocols.collection/${project.version}</bundle>
+      <bundle>mvn:org.opennms.features.telemetry/org.opennms.features.telemetry.common/${project.version}</bundle>
+      <bundle>mvn:org.opennms.features.telemetry.config/org.opennms.features.telemetry.config.api/${project.version}</bundle>
     </feature>
 
-    <feature name="opennms-telemetry-flow" description="OpenNMS :: Telemetry :: Flow" version="${project.version}">
-      <feature>opennms-telemetry-collection</feature>
+    <feature name="opennms-telemetry-netflow" description="OpenNMS :: Telemetry :: Netflow" version="${project.version}">
+      <feature>opennms-telemetry-common</feature>
       <bundle>mvn:org.mongodb/bson/${bsonVersion}</bundle>
       <bundle>mvn:org.apache.commons/commons-csv/${commonsCsvVersion}</bundle>
-      <bundle>mvn:org.opennms.features.telemetry.protocols/org.opennms.features.telemetry.protocols.flow/${project.version}</bundle>
+      <bundle>mvn:org.opennms.features.telemetry.protocols/org.opennms.features.telemetry.protocols.collection/${project.version}</bundle>
+      <bundle>mvn:org.opennms.features.telemetry.protocols/org.opennms.features.telemetry.protocols.flows/${project.version}</bundle>
+      <bundle>mvn:org.opennms.features.telemetry.protocols/org.opennms.features.telemetry.protocols.sflow/${project.version}</bundle>
+    </feature>
+
+    <feature name="opennms-telemetry-sflow" description="OpenNMS :: Telemetry :: SFlow" version="${project.version}">
+      <feature>opennms-telemetry-common</feature>
+      <bundle>mvn:org.mongodb/bson/${bsonVersion}</bundle>
+      <bundle>mvn:org.apache.commons/commons-csv/${commonsCsvVersion}</bundle>
+      <bundle>mvn:org.opennms.features.telemetry.protocols/org.opennms.features.telemetry.protocols.collection/${project.version}</bundle>
+      <bundle>mvn:org.opennms.features.telemetry.protocols/org.opennms.features.telemetry.protocols.flows/${project.version}</bundle>
+      <bundle>mvn:org.opennms.features.telemetry.protocols/org.opennms.features.telemetry.protocols.netflow/${project.version}</bundle>
     </feature>
 
     <feature name="opennms-telemetry-daemon" description="OpenNMS :: Telemetry :: Daemon" version="${project.version}">
@@ -1153,26 +1164,25 @@
       <feature>opennms-core-ipc-sink-api</feature>
       <feature>opennms-dao-api</feature>
       <feature>opennms-dao</feature>
-      <feature>opennms-telemetry-collection</feature>
+      <feature>opennms-telemetry-common</feature>
 
       <bundle dependency="true">mvn:com.google.protobuf/protobuf-java/${protobufVersion}</bundle>
 
-      <bundle>mvn:org.opennms.features.telemetry/org.opennms.features.telemetry.common/${project.version}</bundle>
       <bundle>mvn:org.opennms.features.telemetry/org.opennms.features.telemetry.daemon/${project.version}</bundle>
-      <bundle>mvn:org.opennms.features.telemetry.protocols/org.opennms.features.telemetry.protocols.registry/${project.version}</bundle>
       <bundle>mvn:org.opennms.features.telemetry.config/org.opennms.features.telemetry.config.jaxb/${project.version}</bundle>
+      <bundle>mvn:org.opennms.features.telemetry.protocols/org.opennms.features.telemetry.protocols.registry/${project.version}</bundle>
       <bundle>mvn:org.opennms.features.telemetry.listeners/org.opennms.features.telemetry.listeners.simple/${project.version}</bundle>
       <bundle>mvn:org.opennms.features.telemetry.listeners/org.opennms.features.telemetry.listeners.smart/${project.version}</bundle>
     </feature>
 
     <feature name="opennms-telemetry-jti" description="OpenNMS :: Telemetry :: JTI" version="${project.version}">
-      <feature>opennms-telemetry-collection</feature>
+      <feature>opennms-telemetry-common</feature>
       <bundle>mvn:com.google.protobuf/protobuf-java/${protobufVersion}</bundle>
       <bundle>mvn:org.opennms.features.telemetry.protocols/org.opennms.features.telemetry.protocols.jti/${project.version}</bundle>
     </feature>
     
     <feature name="opennms-telemetry-nxos" description="OpenNMS :: Telemetry :: NX-OS" version="${project.version}">
-      <feature>opennms-telemetry-collection</feature>
+      <feature>opennms-telemetry-common</feature>
       <!-- Use a newer version of Google Protobuf -->
       <bundle>mvn:com.google.protobuf/protobuf-java/3.4.0</bundle>
       <bundle>mvn:org.opennms.features.telemetry.protocols/org.opennms.features.telemetry.protocols.nxos/${project.version}</bundle>

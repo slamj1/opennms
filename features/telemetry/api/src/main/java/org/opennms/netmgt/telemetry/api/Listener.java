@@ -28,10 +28,9 @@
 
 package org.opennms.netmgt.telemetry.api;
 
+import java.util.Map;
 import java.util.Set;
 
-import org.opennms.netmgt.telemetry.api.parser.Parser;
-import org.opennms.netmgt.telemetry.config.api.ListenerDefinition;
 import org.opennms.netmgt.telemetry.config.api.ParserDefinition;
 
 /**
@@ -42,19 +41,16 @@ import org.opennms.netmgt.telemetry.config.api.ParserDefinition;
  * @author jwhite
  */
 public interface Listener {
-
-    void setName(String name);
-
     String getName();
 
-    void setParsers(Set<Parser> parsers);
-
     void start() throws InterruptedException;
-
     void stop() throws InterruptedException;
 
     interface Factory {
-        Listener createListener(final ListenerDefinition listenerDefinition,
-                                final Set<ParserDefinition> parserDefinitions);
+        Parser.Creator parser(final ParserDefinition parserDefinition);
+
+        Listener create(final String name,
+                        final Map<String, String> parameters,
+                        final Set<Parser> parsers);
     }
 }

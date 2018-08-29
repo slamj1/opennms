@@ -3,7 +3,7 @@
 
     <!-- JTI Listener & adpaters -->
 
-    <listener name="JTI-UDP-50000" class-name="org.opennms.netmgt.telemetry.listeners.udp.UdpListener" enabled="false">
+    <listener name="JTI-UDP-50000" class-name="org.opennms.netmgt.telemetry.listeners.simple.Udp" enabled="false">
         <parameter key="port" value="50000"/>
 
         <parser name="JTI-Parser" class-name="" enabled="true">
@@ -27,7 +27,7 @@
 
     <!-- Netflow v5 listener & adapters -->
 
-    <listener name="Netflow-5-UDP-8877" class-name="org.opennms.netmgt.telemetry.listeners.udp.UdpListener" enabled="false">
+    <listener name="Netflow-5-UDP-8877" class-name="org.opennms.netmgt.telemetry.listeners.simple.Udp" enabled="false">
         <parameter key="port" value="8877"/>
 
         <parser name="Netflow-5-Parser" class-name="" enabled="true">
@@ -41,7 +41,7 @@
     <!-- Netflow v9 listener & adapters -->
 
 
-    <listener name="Netflow-9-UDP-4729" class-name="org.opennms.netmgt.telemetry.listeners.flow.parser.netflow9.UdpListener" enabled="false">
+    <listener name="Netflow-9-UDP-4729" class-name="org.opennms.netmgt.telemetry.listeners.simple.Udp" enabled="false">
         <parameter key="port" value="4729"/>
 
         <parser name="Netflow-9-Parser" class-name="" enabled="true">
@@ -54,7 +54,7 @@
 
     <!-- IPFIX listener & adapters -->
 
-    <listener name="IPFIX-UDP-4730" class-name="org.opennms.netmgt.telemetry.listeners.flow.parser.ipfix.UdpListener" enabled="false">
+    <listener name="IPFIX-UDP-4730" class-name="org.opennms.netmgt.telemetry.listeners.simple.Udp" enabled="false">
         <parameter key="port" value="4730"/>
 
         <parser name="IPFIX-UDP-Parser" class-name="" enabled="true">
@@ -62,7 +62,7 @@
         </parser>
     </listener>
 
-    <listener name="IPFIX-TCP-4730" class-name="org.opennms.netmgt.telemetry.listeners.flow.parser.ipfix.TcpListener" enabled="false">
+    <listener name="IPFIX-TCP-4730" class-name="org.opennms.netmgt.telemetry.listeners.simple.Tcp" enabled="false">
         <parameter key="port" value="4730"/>
 
         <parser name="IPFIX-TCP-Parser" class-name="" enabled="true">
@@ -75,7 +75,7 @@
 
     <!-- SFlow listener & adapters -->
 
-    <listener name="SFlow-UDP-6343" class-name="org.opennms.netmgt.telemetry.listeners.sflow.Listener" enabled="false">
+    <listener name="SFlow-UDP-6343" class-name="org.opennms.netmgt.telemetry.listeners.simple.Udp" enabled="false">
         <parameter key="port" value="6343"/>
 
         <parser name="SFlow-Parser" class-name="" enabled="true">
@@ -103,7 +103,7 @@
 
     <!-- NXOS listener & adapters -->
 
-    <listener name="NXOS-UDP-50001" class-name="org.opennms.netmgt.telemetry.listeners.udp.UdpListener" enabled="false">
+    <listener name="NXOS-UDP-50001" class-name="org.opennms.netmgt.telemetry.listeners.simple.Udp" enabled="false">
         <parameter key="port" value="50001"/>
 
         <parser name="NXOS-GPB" class-name="" enabled="true">

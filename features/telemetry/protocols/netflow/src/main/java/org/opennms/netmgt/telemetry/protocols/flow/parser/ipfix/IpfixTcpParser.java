@@ -28,12 +28,13 @@
 
 package org.opennms.netmgt.telemetry.protocols.flow.parser.ipfix;
 
+import static org.opennms.netmgt.telemetry.common.utils.BufferUtils.slice;
+
 import java.net.InetSocketAddress;
 
 import org.opennms.core.ipc.sink.api.AsyncDispatcher;
 import org.opennms.netmgt.telemetry.api.TelemetryMessage;
-import org.opennms.netmgt.telemetry.api.parser.TcpParser;
-import org.opennms.netmgt.telemetry.protocols.common.utils.BufferUtils;
+import org.opennms.netmgt.telemetry.listeners.simple.SimpleTcpParser;
 import org.opennms.netmgt.telemetry.protocols.flow.parser.ParserBase;
 import org.opennms.netmgt.telemetry.protocols.flow.parser.Protocol;
 import org.opennms.netmgt.telemetry.protocols.flow.parser.netflow9.proto.Header;
@@ -42,7 +43,7 @@ import org.opennms.netmgt.telemetry.protocols.flow.parser.session.TcpSession;
 
 import io.netty.channel.EventLoopGroup;
 
-public class IpfixTcpParser extends ParserBase implements TcpParser {
+public class IpfixTcpParser extends ParserBase implements SimpleTcpParser {
 
     public IpfixTcpParser(final String name,
                           final AsyncDispatcher<TelemetryMessage> dispatcher) {
@@ -54,7 +55,8 @@ public class IpfixTcpParser extends ParserBase implements TcpParser {
     }
 
     @Override
-    public void stop() {}
+    public void stop() {
+    }
 
     @Override
     public Handler accept(final InetSocketAddress remoteAddress,
@@ -62,7 +64,7 @@ public class IpfixTcpParser extends ParserBase implements TcpParser {
         final TcpSession session = new TcpSession();
 
         return buffer -> {
-            final Header header = new Header(BufferUtils.slice(buffer, Header.SIZE));
+            final Header header = new Header(slice(buffer, Header.SIZE));
             final Packet packet = new Packet(session, header, buffer);
 
             this.transmit(packet, remoteAddress);

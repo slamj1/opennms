@@ -28,7 +28,7 @@
 
 package org.opennms.netmgt.telemetry.protocols.flow.parser.netflow9.proto;
 
-import static org.opennms.netmgt.telemetry.protocols.common.utils.BufferUtils.slice;
+import static org.opennms.netmgt.telemetry.common.utils.BufferUtils.slice;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;

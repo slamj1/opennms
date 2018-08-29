@@ -29,7 +29,9 @@
 package org.opennms.netmgt.telemetry.minion;
 
 import org.opennms.netmgt.telemetry.config.api.ListenerDefinition;
+import org.opennms.netmgt.telemetry.config.api.ParserDefinition;
 
+import java.util.List;
 import java.util.Map;
 
 public class ListenerConfig implements ListenerDefinition {
@@ -58,6 +60,12 @@ public class ListenerConfig implements ListenerDefinition {
     @Override
     public Map<String, String> getParameterMap() {
         return parameters;
+    }
+
+    @Override
+    public List<? extends ParserDefinition> getParsers() {
+        // FIXME: Implement
+        return null;
     }
 
 }

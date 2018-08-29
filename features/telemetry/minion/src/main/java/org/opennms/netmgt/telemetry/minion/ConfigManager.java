@@ -81,7 +81,7 @@ public class ConfigManager implements ManagedServiceFactory {
         // Build the protocol and listener definitions
         final QueueConfig queueConfig = new QueueConfig(parameters);
         final ListenerConfig listenerConfig = new ListenerConfig(parameters);
-        final ProtocolConfig protocolConfig = new ProtocolConfig(parameters);
+        final AdapterConfig protocolConfig = new AdapterConfig(parameters);
 
         final TelemetrySinkModule sinkModule = new TelemetrySinkModule(queueConfig);
         sinkModule.setDistPollerDao(distPollerDao);

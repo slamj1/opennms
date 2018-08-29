@@ -28,11 +28,15 @@
 
 package org.opennms.netmgt.telemetry.protocols.flow.parser.ipfix;
 
+import static org.opennms.netmgt.telemetry.common.utils.BufferUtils.slice;
+import static org.opennms.netmgt.telemetry.common.utils.BufferUtils.uint16;
+
 import java.nio.ByteBuffer;
 
 import org.opennms.core.ipc.sink.api.AsyncDispatcher;
 import org.opennms.netmgt.telemetry.api.TelemetryMessage;
-import org.opennms.netmgt.telemetry.protocols.common.utils.BufferUtils;
+import org.opennms.netmgt.telemetry.listeners.simple.SimpleUdpParser;
+import org.opennms.netmgt.telemetry.listeners.smart.SmartUdpParser;
 import org.opennms.netmgt.telemetry.protocols.flow.parser.Protocol;
 import org.opennms.netmgt.telemetry.protocols.flow.parser.UdpParserBase;
 import org.opennms.netmgt.telemetry.protocols.flow.parser.ie.RecordProvider;
@@ -40,7 +44,7 @@ import org.opennms.netmgt.telemetry.protocols.flow.parser.ipfix.proto.Header;
 import org.opennms.netmgt.telemetry.protocols.flow.parser.ipfix.proto.Packet;
 import org.opennms.netmgt.telemetry.protocols.flow.parser.session.Session;
 
-public class IpfixUdpParser extends UdpParserBase {
+public class IpfixUdpParser extends UdpParserBase implements SimpleUdpParser, SmartUdpParser {
 
     public IpfixUdpParser(final String name,
                           final AsyncDispatcher<TelemetryMessage> dispatcher) {
@@ -50,9 +54,14 @@ public class IpfixUdpParser extends UdpParserBase {
     @Override
     protected RecordProvider parse(final Session session,
                                    final ByteBuffer buffer) throws Exception {
-        final Header header = new Header(BufferUtils.slice(buffer, Header.SIZE));
+        final Header header = new Header(slice(buffer, Header.SIZE));
         final Packet packet = new Packet(session, header, buffer);
 
         return packet;
+    }
+
+    @Override
+    public boolean handles(final ByteBuffer buffer) {
+        return uint16(buffer) == Header.VERSION;
     }
 }

@@ -113,7 +113,12 @@
     </dependency>
     <dependency>
       <groupId>org.opennms.features.telemetry.protocols</groupId>
-      <artifactId>org.opennms.features.telemetry.protocols.flow</artifactId>
+      <artifactId>org.opennms.features.telemetry.protocols.netflow</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.opennms.features.telemetry.protocols</groupId>
+      <artifactId>org.opennms.features.telemetry.protocols.sflow</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>

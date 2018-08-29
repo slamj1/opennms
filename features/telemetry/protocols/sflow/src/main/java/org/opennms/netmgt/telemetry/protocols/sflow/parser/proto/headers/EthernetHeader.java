@@ -31,7 +31,7 @@ package org.opennms.netmgt.telemetry.protocols.sflow.parser.proto.headers;
 import java.nio.ByteBuffer;
 
 import org.bson.BsonWriter;
-import org.opennms.netmgt.telemetry.protocols.common.utils.BufferUtils;
+import org.opennms.netmgt.telemetry.common.utils.BufferUtils;
 import org.opennms.netmgt.telemetry.protocols.sflow.parser.InvalidPacketException;
 
 public class EthernetHeader {

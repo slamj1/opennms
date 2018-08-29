@@ -28,9 +28,8 @@
 
 package org.opennms.netmgt.telemetry.protocols.flow.parser.ipfix.proto;
 
-import static org.opennms.netmgt.telemetry.protocols.common.utils.BufferUtils.slice;
+import static org.opennms.netmgt.telemetry.common.utils.BufferUtils.slice;
 
-import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.util.Collections;
 import java.util.Iterator;
